@@ -1,0 +1,110 @@
+//plugins {
+//    id 'java'
+//}
+//
+//group 'org.example'
+//version '1.0-SNAPSHOT'
+//
+//repositories {
+//    mavenCentral()
+//}
+//
+//dependencies {
+//    testImplementation 'com.google.code.gson:gson:2.10'
+//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+//    testImplementation 'io.rest-assured:rest-assured:5.3.0'
+//    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.3.0'
+//    implementation group: 'io.rest-assured', name: 'rest-assured-all', version: '5.3.0'
+//    implementation group: 'io.rest-assured', name: 'rest-assured-common', version: '5.3.0'
+//    implementation group: 'org.json', name: 'json', version: '20220924'
+//    testImplementation group: 'io.rest-assured', name: 'json-path', version: '5.3.0'
+//    testImplementation group: 'io.rest-assured', name: "json-schema-validator", version: '5.3.0'
+//    testImplementation group: 'org.json', name: 'json', version: '20220924'
+//    implementation group: 'org.json', name: 'json', version: '20220924'
+//    testImplementation 'org.hamcrest:hamcrest:2.2'
+//
+//    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+//    testImplementation(platform("io.cucumber:cucumber-bom:7.9.0"))
+//
+//    testImplementation("io.cucumber:cucumber-java:7.5.0")
+//    testImplementation("io.cucumber:cucumber-junit-platform-engine")
+//    implementation group: 'io.cucumber', name: 'cucumber-picocontainer', version: '7.5.0'
+//}
+//
+//test {
+//    useJUnitPlatform()
+//    systemProperty("cucumber.junit-platform.naming-strategy", "long")
+//    systemProperty("cucumber.plugin", "message:build/reports/cucumber.ndjson, timeline:build/reports/timeline, html:build/reports/cucumber.html")
+//}
+//
+//configurations {
+//    cucumberRuntime {
+//        extendsFrom testImplementation
+//    }
+//}
+//
+//group 'com.cucumber'
+//version '1.0.0'
+//
+//
+//task cucumber(type: JavaExec) {
+//    dependsOn assemble, compileTestJava
+//    systemProperty('envcu', System.properties['envcu'] ?: 'dev')
+//    main = "io.cucumber.core.cli.Main"
+//    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+//    args = ['--plugin', 'pretty','--plugin','html:cucumber/report.html','--plugin', 'json:cucumber/report.json','--glue', 'com.cucumber', 'src/test/resources/com/cucumber']
+//}
+plugins {
+    id 'java'
+}
+
+group 'com.cucumber'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+dependencies {
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation(platform("io.cucumber:cucumber-bom:7.9.0"))
+
+    testImplementation("io.cucumber:cucumber-java")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine")
+    testImplementation("org.junit.platform:junit-platform-suite")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    //implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.5.3'
+
+    /*REST-ASSURED*/
+    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.3.0'
+    implementation group: 'io.rest-assured', name: 'rest-assured-all', version: '5.3.0'
+    implementation group: 'io.rest-assured', name: 'rest-assured-common', version: '5.3.0'
+    implementation group: 'org.json', name: 'json', version: '20220924'
+    testImplementation group: 'io.rest-assured', name: 'json-path', version: '5.3.0'
+    testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: '5.3.0'
+
+
+    implementation group: 'io.cucumber', name: 'cucumber-picocontainer', version: '7.5.0'
+
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty("cucumber.junit-platform.naming-strategy", "long")
+    systemProperty("cucumber.plugin", "message:build/reports/cucumber.ndjson, timeline:build/reports/timeline, html:build/reports/cucumber.html")
+}
+
+task cucumber(type: JavaExec) {
+    dependsOn assemble, compileTestJava
+    systemProperty('envcu', System.properties['envcu'] ?: 'dev')
+    main = "io.cucumber.core.cli.Main"
+    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+    args = ['--plugin', 'pretty','--plugin','html:cucumber/report.html','--plugin', 'json:cucumber/report.json','--glue', 'com.cucumber', 'src/test/resources/com/cucumber']
+}
